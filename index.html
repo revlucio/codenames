@@ -15,20 +15,24 @@
   </head>
   <body>
     <ul id="messages"></ul>
-    <form action="">
+    <form id="myForm" action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
         var socket = io();
-        $('form').submit(function(){
-            socket.emit('chat message', $('#m').val());
-            $('#m').val('');
+        document.getElementById('myForm').onsubmit = function(){
+            socket.emit('chat message', document.getElementById('m').value);
+            document.getElementById('m').value = '';
             return false;
-        });
+        };
         socket.on('chat message', function(msg){
-            $('#messages').append($('<li>').text(msg));
+            var para = document.createElement("li");
+            var node = document.createTextNode(msg);
+            
+            para.appendChild(node);
+
+            document.getElementById('messages').appendChild(para);
         });
     </script>
   </body>
